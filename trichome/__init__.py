@@ -1,1 +1,0 @@
-from trichome.config import *

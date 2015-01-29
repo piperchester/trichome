@@ -1,0 +1,1 @@
+from fuzz.config import *

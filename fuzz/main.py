@@ -1,10 +1,10 @@
 __author__ = 'piperchester'
 
-import trichome
+import fuzz.config
 
 
 def main():
-    trichome.config()
+    fuzz.args()
 
 if __name__ == '__main__':
     main()
