@@ -1,6 +1,6 @@
 # trichome
 ![](http://upload.wikimedia.org/wikipedia/commons/9/9e/Autumn_Red_peaches.jpg)
-> Here you stand, a Gladiator, in the Colisium of Testing.
+> Here you stand, a Gladiator, in the Coliseum of Testing.
 
 ### What?
 A simple tool to fuzz test a web-based application.
