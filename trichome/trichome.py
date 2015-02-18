@@ -1,6 +1,13 @@
 import requests
 import argparse
 
+from sys import version, exit as version, exit
+
+
+if version < '3':
+  print('Oh noes! Trichome require Python 3.')
+  exit(1)
+
 
 def discover(target, username='', password=''):
   """Retrieves information from the provided URL"""
