@@ -1,12 +1,11 @@
 import requests
 import argparse
+import sys
 
-from sys import version, exit as version, exit
 
-
-if version < '3':
-  print('Oh noes! Trichome require Python 3.')
-  exit(1)
+if sys.version_info < (3,0):
+  print('Oh noes! Trichome requires Python 3.')
+  sys.exit(1)
 
 
 def discover(target, username='', password=''):
