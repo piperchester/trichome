@@ -8,8 +8,18 @@ if sys.version_info < (3,0):
   sys.exit(1)
 
 
-def discover(target, username='', password=''):
+def get_session():
+  """Gets session object"""
+
+def get_cookie(path):
+  """Gets session cookie"""
+
+def discover():
   """Retrieves information from the provided URL"""
+
+  target = input('Enter target URL: ')
+  username = input('Enter username: ')
+  password = input('Enter password: ')
 
   if 'http://' not in target:
     print("What protocol are we using? HTTP I presume?")
@@ -26,10 +36,10 @@ def get_parser():
                       'list all discovered inputs of target', nargs=1)
   parser.add_argument('test', help=
                       'discovers all inputs, then exploits inputs', nargs='?')
+  parser.add_argument('-w', '--common-words', nargs=1, type=argparse.FileType('r'), help=
+                      'newline-delimited file of common words to be used in page guessing and input guessing') 
   parser.add_argument('-a', '--customauth', help=
                       'signals that trichome should use hard-coded auth for a specific application (e.g. dvwa)')
-  parser.add_argument('-w', '--common-words', help=
-                      'newline-delimited file of common words to be used in page guessing and input guessing')
   parser.add_argument('-v', '--vectors', help=
                       'newline-delimited file of common exploits to vulnerabilities')
   parser.add_argument('-s', '--sensitive', help=
@@ -47,10 +57,7 @@ def command_line_runner():
   args = vars(parser.parse_args())
 
   if args['discover']:
-    target = input('Enter target URL: ')
-    username = input('Enter username: ')
-    password = input('Enter password: ')
-    print(discover(target, username, password))
+    print(discover())    
 
 if __name__ == "__main__":
   command_line_runner()
