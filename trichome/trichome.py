@@ -2,6 +2,7 @@
 
 import sys, urllib, re, requests
 import parser
+from crawler.crawler import Crawler
 
 from bs4 import BeautifulSoup
 
@@ -74,16 +75,10 @@ def report(inputs=''):
 def discover(url):
 	"""Retrieves information from the provided URL."""
 	print("Beginning...")
-	target = validate_protocol(url)
-	response = requests.get(target)
-	cookie_jar = requests.utils.dict_from_cookiejar(response.cookies)
-
-	inputs = get_inputs(response)
-	links = get_links(response)
-	query_strings = get_query_strings(links) 
-	# submit(response, query_strings[0])   
-
-	report(inputs)
+	c = Crawler()
+	result = c.bfs(url[0], url[0])
+	print("FINISHED CRAWLING")
+	print(result)
 
 def command_line_runner():
 	"""Consumes commands to trichome."""
