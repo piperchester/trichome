@@ -26,12 +26,13 @@ class Gatherer(object):
 
 class Crawler(object):
 	"""docstring for Crawler"""
-	def __init__(self, debug=False):
+	def __init__(self, url, debug=False):
 		super(Crawler, self).__init__()
 		self.debug = debug
+		self.url = url
 
-	def crawl(self, url, gathers):
-		self.bfs(url, url, [], gathers)
+	def crawl(self, gathers):
+		self.bfs(self.url, self.url, [], gathers)
 
 	def log(self, msg):
 		if self.debug:
