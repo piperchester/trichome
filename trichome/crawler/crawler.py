@@ -15,34 +15,71 @@ def filter_rest(filter_lambda, interable):
 			rest.append(i)
 	return (filtered, rest)
 
+
+class Gatherer(object):
+	"""docstring for Gatherer"""
+	def __init__(self):
+		super(Gatherer, self).__init__()
+		
+	def did_hit_url(self, url, body):
+		print("Hit -> " + url)
+
 class Crawler(object):
 	"""docstring for Crawler"""
-	def __init__(self):
+	def __init__(self, debug=False):
 		super(Crawler, self).__init__()
+		self.debug = debug
 
-	def bfs(self, url_base, url, visited=[]):
-		print("Starting BFS link Crawler on " + url)
+	def crawl(self, url, gather):
+		self.bfs(url, url, [], gather)
+
+	def log(self, msg):
+		if self.debug:
+			print("[BFS CRAWLER]:" + msg)
+
+	def bfs(self, url_base, url, visited, gather):
+		self.log("Starting BFS link Crawler on " + url)
+		# Do the BFS
 		visited.append(url)
 		main = requests.get(url, verify=False)
 		if("text/html" in main.headers['content-type'].split(';')):
+
+			# Public to Gather
+			gather.did_hit_url(url, main.content)
+
+			# Parse the DOM
 			htmltree = BeautifulSoup(main.content)
 			(linkTags, rest) = filter_rest(lambda x: 'href' in x.attrs, htmltree.findAll('a'))
-			# Show debug info
+			
+			# Show debug info for refless a tags
 			for d in rest:
-				print("No followable href on " + str(d)) 
+				self.log("No followable href on " + str(d)) 
+
+			# Map the href tag
 			links = list(map(lambda x: x.attrs['href'], linkTags))
+
+			# Check for base origin, aka
+			#   se.rit.edu/whatever <- has origin
+			#   /whatever <- does not have origin
 			(has_origin, root_origin) = filter_rest(is_absolute, links)
 
+			# Filter out the links that leave the origin
 			origin = urlparse(url_base)
 			(same_origin, leaf) = filter_rest(lambda x: urlparse(x).netloc == origin.netloc, has_origin)
 
+			# Debug logging
 			for l in leaf:
-				print("Url leaves origin " + l)
+				self.log("Url leaves origin " + l)
 
+			# Make all the links from origin
 			followable = same_origin + list(map(lambda x: origin.scheme + '://' + origin.netloc + x, root_origin))
 
+			# Follow links recursivly that you haven't been too
+			all_visited = []
 			for l in [i for i in followable if i not in visited]:
-				self.bfs(url_base, l, visited)
-			return visited
+				all_visited.append(self.bfs(url_base, l, visited, gather))
+
+			# When done return visited, not really used with the gatherers
+			return all_visited
 		else:
-			print("None parseable content type for " + url + " -> " + main.headers['content-type'])
+			self.log("None parseable content type for " + url + " -> " + main.headers['content-type'])

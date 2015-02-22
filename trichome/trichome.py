@@ -2,7 +2,7 @@
 
 import sys, urllib, re, requests
 import parser
-from crawler.crawler import Crawler
+from crawler.crawler import Crawler, Gatherer
 
 from bs4 import BeautifulSoup
 
@@ -76,7 +76,8 @@ def discover(url):
 	"""Retrieves information from the provided URL."""
 	print("Beginning...")
 	c = Crawler()
-	result = c.bfs(url[0], url[0])
+	g = Gatherer()
+	result = c.crawl(url[0], g)
 	print("FINISHED CRAWLING")
 	print(result)
 
