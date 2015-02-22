@@ -34,11 +34,19 @@ def get_links(response):
 
 def get_query_strings(links):
 	"""Find all query strings from links dict."""
-	crawls = []
+	urlParameters = {}
 	for link in links:
-		if ('href' in link.attrs and '?' in link.attrs['href']):
-			crawls.append(link)
-	return crawls
+		urlParameters[link] = get_url_parameters(link);
+	print(urlParameters)
+	return urlParameters;
+
+def get_url_parameters(link):
+	if(link != None):
+		url = urllib.parse.urlparse(link)
+		parameters = urllib.parse.parse_qs(url.query)
+		return parameters.keys()
+	return []	
+			
 
 def submit(response, link):	
 	"""Attempt POSTs based on the query string."""
