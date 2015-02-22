@@ -1,63 +1,87 @@
-import requests
-import argparse
-import sys
+#!/bin/env/python3
 
+import sys, urllib, re, requests
+import parser
+
+from bs4 import BeautifulSoup
 
 if sys.version_info < (3,0):
-  print('Oh noes! Trichome requires Python 3.')
-  sys.exit(1)
+	print('Uh oh. Trichome requires Python 3.')
+	sys.exit(1)
 
 
-def get_session():
-  """Gets session object"""
+def validate_protocol(url):
+	"""Checks URL for HTTP..."""
+	target = ''.join(url)
+	if 'http://' not in target:
+		target = 'http://' + target
+	return target
 
-def get_cookie(path):
-  """Gets session cookie"""
+def get_inputs(response):
+	"""Finds input fields on page."""
+	soup = BeautifulSoup(response.text)
+	inputs = soup.find_all('input')
+	return inputs
 
-def discover():
-  """Retrieves information from the provided URL"""
+def get_links(response):
+	"""Find links on page, add to crawls tuple."""
+	soup = BeautifulSoup(response.text)
+	links = soup.find_all('a')
+	return links
 
-  target = input('Enter target URL: ')
-  username = input('Enter username: ')
-  password = input('Enter password: ')
+def get_query_strings(links):
+	"""Find all query strings from links dict."""
+	crawls = []
+	for link in links:
+		if ('href' in link.attrs and '?' in link.attrs['href']):
+			crawls.append(link)
+	return crawls
 
-  if 'http://' not in target:
-    print("What protocol are we using? HTTP I presume?")
-    target = "http://" + target
+def submit(response, link):	
+	"""Attempt POSTs based on the query string."""
+	target = response.url + link['href']
+	target = re.sub('[\?q\=]', '', target)
+	payload = {}
 
-  r = requests.get(target, auth=(username, password))
-  return r.json()
+	with requests.Session() as s:
+		s.post(target, data=payload)
+		r = s.get(target)
 
-def get_parser():
-  """Initializes the argument parser."""
+def report(inputs=''):
+	"""Writes found inputs to a text file."""
 
-  parser = argparse.ArgumentParser(description='trichome: the one-stop-shop for web-based vulnerability testing')
-  parser.add_argument('discover', help=
-                      'list all discovered inputs of target', nargs=1)
-  parser.add_argument('test', help=
-                      'discovers all inputs, then exploits inputs', nargs='?')
-  parser.add_argument('-w', '--common-words', nargs=1, type=argparse.FileType('r'), help=
-                      'newline-delimited file of common words to be used in page guessing and input guessing') 
-  parser.add_argument('-a', '--customauth', help=
-                      'signals that trichome should use hard-coded auth for a specific application (e.g. dvwa)')
-  parser.add_argument('-v', '--vectors', help=
-                      'newline-delimited file of common exploits to vulnerabilities')
-  parser.add_argument('-s', '--sensitive', help=
-                      "newline-delimited file data that should never be leaked. It's assumed that this data is in the application's database (e.g. test data), but is not reported in any response")  
-  parser.add_argument('-r', '--random', default=False, action='store_true', help=
-                      "when off, try each input to each page systematically. When on, choose a random page, then a random input field and test all vectors. Default: false.")
-  parser.add_argument('-z', '--slow', type=int, default=500, help=
-                      "number of milliseconds considered when a response is considered 'slow'. Default is 500 milliseconds")
-  return parser
+	# TODO(team): decide if we want to go this route
+
+	with open('inputs.txt', 'w+') as f:
+		f.write('{: ^50}\n\n'.format('System Inputs'))
+
+		f.write('{:-^50}\n'.format('Input Fields'))
+		for i in inputs:
+			f.write('Alt: {0} Name: {1}\n'.format(i['alt'], i['name']))
+		f.close()
+
+def discover(url):
+	"""Retrieves information from the provided URL."""
+	print("Beginning...")
+	target = validate_protocol(url)
+	response = requests.get(target)
+	cookie_jar = requests.utils.dict_from_cookiejar(response.cookies)
+
+	inputs = get_inputs(response)
+	links = get_links(response)
+	query_strings = get_query_strings(links) 
+	# submit(response, query_strings[0])   
+
+	report(inputs)
 
 def command_line_runner():
-  """Consumes commands to trichome."""
+	"""Consumes commands to trichome."""
+	command_parser = parser.get_parser()
+	args = vars(command_parser.parse_args())
 
-  parser = get_parser()
-  args = vars(parser.parse_args())
-
-  if args['discover']:
-    print(discover())    
+	if args['discover']:
+		target = args['URL']
+		result = discover(target)
 
 if __name__ == "__main__":
-  command_line_runner()
+	command_line_runner()
