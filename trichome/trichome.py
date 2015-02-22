@@ -26,7 +26,10 @@ def get_inputs(response):
 def get_links(response):
 	"""Find links on page, add to crawls tuple."""
 	soup = BeautifulSoup(response.text)
-	links = soup.find_all('a')
+	tags = soup.find_all('a')
+	links = []
+	for tag in tags:
+		links.append(tag.get('href'))
 	return links
 
 def get_query_strings(links):
