@@ -30,22 +30,23 @@ class Crawler(object):
 		super(Crawler, self).__init__()
 		self.debug = debug
 
-	def crawl(self, url, gather):
-		self.bfs(url, url, [], gather)
+	def crawl(self, url, gathers):
+		self.bfs(url, url, [], gathers)
 
 	def log(self, msg):
 		if self.debug:
 			print("[BFS CRAWLER]:" + msg)
 
-	def bfs(self, url_base, url, visited, gather):
+	def bfs(self, url_base, url, visited, gathers):
 		self.log("Starting BFS link Crawler on " + url)
 		# Do the BFS
 		visited.append(url)
 		main = requests.get(url, verify=False)
 		if("text/html" in main.headers['content-type'].split(';')):
 
-			# Public to Gather
-			gather.did_hit_url(url, main.content)
+			# Public to Gathesr
+			for g in gathers:
+				g.did_hit_url(url, main.content)
 
 			# Parse the DOM
 			htmltree = BeautifulSoup(main.content)
@@ -77,9 +78,9 @@ class Crawler(object):
 			# Follow links recursivly that you haven't been too
 			all_visited = []
 			for l in [i for i in followable if i not in visited]:
-				all_visited.append(self.bfs(url_base, l, visited, gather))
+				all_visited.append(self.bfs(url_base, l, visited, gathers))
 
-			# When done return visited, not really used with the gatherers
+			# When done return visited, not really used with the gathersers
 			return all_visited
 		else:
 			self.log("None parseable content type for " + url + " -> " + main.headers['content-type'])

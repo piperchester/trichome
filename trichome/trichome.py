@@ -69,7 +69,19 @@ def discover(url):
 	print("Beginning...")
 	c = Crawler()
 	g = Gatherer()
-	result = c.crawl(url[0], g)
+
+	class Test(Gatherer):
+		"""docstring for Test"""
+		def __init__(self):
+			super(Test, self).__init__()
+			self.count = 0
+			
+		def did_hit_url(self, url, body):
+			# Not gonna call super, super just logs
+			self.count = self.count + 1
+			print(self.count)
+
+	result = c.crawl(url[0], [Test(), Gatherer()])
 	print("FINISHED CRAWLING")
 	print(result)
 
