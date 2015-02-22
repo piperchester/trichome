@@ -2,6 +2,7 @@
 
 import sys, urllib, re, requests
 import parser
+from crawler.crawler import Crawler, Gatherer
 
 from bs4 import BeautifulSoup
 
@@ -73,16 +74,23 @@ def report(inputs=''):
 def discover(url):
 	"""Retrieves information from the provided URL."""
 	print("Beginning...")
-	target = validate_protocol(url)
-	response = requests.get(target)
-	cookie_jar = requests.utils.dict_from_cookiejar(response.cookies)
+	c = Crawler()
+	g = Gatherer()
 
-	inputs = get_inputs(response)
-	links = get_links(response)
-	query_strings = get_query_strings(links) 
-	# submit(response, query_strings[0])   
+	class Test(Gatherer):
+		"""docstring for Test"""
+		def __init__(self):
+			super(Test, self).__init__()
+			self.count = 0
+			
+		def did_hit_url(self, url, body):
+			# Not gonna call super, super just logs
+			self.count = self.count + 1
+			print(self.count)
 
-	report(inputs)
+	result = c.crawl(url[0], [Test(), Gatherer()])
+	print("FINISHED CRAWLING")
+	print(result)
 
 def command_line_runner():
 	"""Consumes commands to trichome."""
