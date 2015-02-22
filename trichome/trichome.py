@@ -37,7 +37,6 @@ def get_query_strings(links):
 	urlParameters = {}
 	for link in links:
 		urlParameters[link] = get_url_parameters(link);
-	print(urlParameters)
 	return urlParameters;
 
 def get_url_parameters(link):
