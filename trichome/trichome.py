@@ -49,9 +49,6 @@ def get_url_parameters(link):
 
 def report(inputs=''):
 	"""Writes found inputs to a text file."""
-
-	# TODO(team): decide if we want to go this route
-
 	with open('inputs.txt', 'w+') as f:
 		f.write('{: ^50}\n\n'.format('System Inputs'))
 		f.write('{:-^50}\n'.format('Input Fields'))
