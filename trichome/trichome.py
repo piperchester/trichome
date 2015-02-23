@@ -47,17 +47,6 @@ def get_url_parameters(link):
 		parameters = urllib.parse.parse_qs(url.query)
 		return parameters.keys()
 	return []	
-			
-
-def submit(response, link):	
-	"""Attempt POSTs based on the query string."""
-	target = response.url + link['href']
-	target = re.sub('[\?q\=]', '', target)
-	payload = {}
-
-	with requests.Session() as s:
-		s.post(target, data=payload)
-		r = s.get(target)
 
 def report(inputs=''):
 	"""Writes found inputs to a text file."""
