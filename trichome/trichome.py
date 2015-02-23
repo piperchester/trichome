@@ -9,14 +9,7 @@ from bs4 import BeautifulSoup
 if sys.version_info < (3,0):
 	print('Uh oh. Trichome requires Python 3.')
 	sys.exit(1)
-
-
-def validate_protocol(url):
-	"""Checks URL for HTTP..."""
-	target = ''.join(url)
-	if 'http://' not in target:
-		target = 'http://' + target
-	return target
+	
 
 def get_inputs(response):
 	"""Finds input fields on page."""
