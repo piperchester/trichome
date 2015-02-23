@@ -71,7 +71,7 @@ def report(inputs=''):
 			f.write('Alt: {0} Name: {1}\n'.format(i['alt'], i['name']))
 		f.close()
 
-def discover(url):
+def discover(url, common_words=None):
 	"""Retrieves information from the provided URL."""
 	print("Beginning...")
 	c = Crawler()
@@ -92,12 +92,13 @@ def discover(url):
 	print("FINISHED CRAWLING")
 	print(result)
 
-def get_common_words(words):
-	common_words = []
-	with open(words) as fp:
-		for line in fp:
-			common_words.append(line)	
-	return common_words
+def get_common_words(words_file):
+	"""Converts words from text file into list."""
+	words = []
+	with open(words_file.name, 'r') as f:
+		words.append(f.read().strip())
+	f.closed
+	return words
 
 def command_line_runner():
 	"""Consumes commands to trichome."""
@@ -106,12 +107,12 @@ def command_line_runner():
 
 	if args['discover']:
 		target = args['URL']
+		words = []
 		if args['common_words']:
-			print(args['common_words'])
-			# print(args.common_words.readlines())
-			# print(.readlines())
+			words_file = args['common_words'][0]
+			words = get_common_words(words_file)
 
-		result = discover(target)
+		result = discover(target, words)
 
 if __name__ == "__main__":
 	command_line_runner()
