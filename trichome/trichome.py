@@ -62,7 +62,7 @@ def report(inputs=''):
 def discover(url, common_words=None):
 	"""Retrieves information from the provided URL."""
 	print("Beginning...")
-	c = Crawler(url[0])
+	c = Crawler(url[0], auth=True)
 	g = Gatherer()
 
 	class Test(Gatherer):

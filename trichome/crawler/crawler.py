@@ -26,10 +26,15 @@ class Gatherer(object):
 
 class Crawler(object):
 	"""docstring for Crawler"""
-	def __init__(self, url, debug=False):
+	def __init__(self, url, debug=False, auth=False):
 		super(Crawler, self).__init__()
+		self.session = requests.session()
 		self.debug = debug
 		self.url = url
+		
+		if(auth):
+			authPostData = {'username' : 'admin', 'password' : 'password', 'Login' : 'Login'}
+			self.session.post(url, data=authPostData)
 
 	def crawl(self, gathers):
 		self.bfs(self.url, self.url, [], gathers)
@@ -42,7 +47,7 @@ class Crawler(object):
 		self.log("Starting BFS link Crawler on " + url)
 		# Do the BFS
 		visited.append(url)
-		main = requests.get(url, verify=False)
+		main = self.session.get(url, verify=False)
 		if("text/html" in main.headers['content-type'].split(';')):
 
 			# Public to Gathesr
