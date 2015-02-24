@@ -1,0 +1,7 @@
+                  System Inputs                   
+
+-------------------Input Fields-------------------
+Alt: Search box Name: q
+-----------------Reachable Links------------------
+---------------------Cookies----------------------
+SESS898dbe88341bcf76a76e32bed5cfd58f : scq7117gm22nkdhfuj281jbq44

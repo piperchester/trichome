@@ -3,8 +3,7 @@
 import sys, urllib, re, requests
 import parser
 from crawler.crawler import Crawler, Gatherer
-from crawler.guessingGatherer import GuessingGatherer
-
+from crawler.guessingGatherer import InputGatherer, GuessingGatherer, CookieGatherer, CountGatherer
 from bs4 import BeautifulSoup
 
 if sys.version_info < (3,0):
@@ -68,25 +67,13 @@ def discover(url, common_words=None):
 	"""Retrieves information from the provided URL."""
 	print("Beginning...")
 	c = Crawler(url[0], auth=True)
-	g = Gatherer()
 
-	class Test(Gatherer):
-		"""docstring for Test"""
-		def __init__(self):
-			super(Test, self).__init__()
-			self.count = 0
-			
-		def did_hit_url(self, url, body):
-			# Not gonna call super, super just logs
-			self.count = self.count + 1
-			print(self.count)
-
-	result = c.crawl([Test(), Gatherer(), GuessingGatherer()])
+	result = c.crawl([CountGatherer(), GuessingGatherer(), InputGatherer(), Gatherer(), CookieGatherer()])
 	print("FINISHED CRAWLING")
+
+	# TODO(michael): pass the result of the crawl back to our reporter
 	r = requests.get(url[0])
 	inputs = get_inputs(r)
-	
-	# TODO(michael): pass the result of the crawl back to our reporter
 	cookies = get_cookies(r)
 	report(inputs, None, cookies)
 

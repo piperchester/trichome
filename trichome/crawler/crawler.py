@@ -50,7 +50,6 @@ class Crawler(object):
 		main = self.session.get(url, verify=False)
 		
 		if("text/html" in main.headers['content-type'].split(';')):
-
 			# Public to Gathers
 			for g in gatherers:
 				g.did_hit_url(url, main.content)
@@ -75,19 +74,19 @@ class Crawler(object):
 			origin = urlparse(url_base)
 			(same_origin, leaf) = filter_rest(lambda x: urlparse(x).netloc == origin.netloc, has_origin)
 
-			# Debug logging
-			for l in leaf:
-				self.log("Url leaves origin " + l)
-
 			# Make all the links from origin
 			followable = same_origin + list(map(lambda x: origin.scheme + '://' + origin.netloc + x, root_origin))
 
 			# Follow links recursivly that you haven't been too
 			all_visited = []
+			breakpoint = 0
 			for l in [i for i in followable if i not in visited]:
-				all_visited.append(self.bfs(url_base, l, visited, gatherers))
+				if breakpoint >= 30:
+					break
+				else:
+					breakpoint = breakpoint + 1
+					all_visited.append(self.bfs(url_base, l, visited, gatherers))
 
-			# When done return visited, not really used with the gatherersers
 			return all_visited
 		else:
 			self.log("None parseable content type for " + url + " -> " + main.headers['content-type'])
