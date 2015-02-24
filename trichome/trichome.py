@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 if sys.version_info < (3,0):
 	print('Uh oh. Trichome requires Python 3.')
 	sys.exit(1)
-	
+
 
 def get_inputs(response):
 	"""Finds input fields on page."""
@@ -34,7 +34,7 @@ def get_query_strings(links):
 	return urlParameters;
 
 def get_url_parameters(link):
-	if(link != None):
+	if link:
 		url = urllib.parse.urlparse(link)
 		parameters = urllib.parse.parse_qs(url.query)
 		return parameters.keys()
