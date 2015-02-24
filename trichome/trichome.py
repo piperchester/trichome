@@ -3,6 +3,7 @@
 import sys, urllib, re, requests
 import parser
 from crawler.crawler import Crawler, Gatherer
+from crawler.guessingGatherer import GuessingGatherer
 
 from bs4 import BeautifulSoup
 
@@ -76,7 +77,7 @@ def discover(url, common_words=None):
 			self.count = self.count + 1
 			print(self.count)
 
-	result = c.crawl([Test(), Gatherer()])
+	result = c.crawl([Test(), Gatherer(), GuessingGatherer()])
 	print("FINISHED CRAWLING")
 	print(result)
 

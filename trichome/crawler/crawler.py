@@ -48,9 +48,10 @@ class Crawler(object):
 		# Do the BFS
 		visited.append(url)
 		main = self.session.get(url, verify=False)
+		
 		if("text/html" in main.headers['content-type'].split(';')):
 
-			# Public to Gathesr
+			# Public to Gathers
 			for g in gathers:
 				g.did_hit_url(url, main.content)
 
