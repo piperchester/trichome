@@ -12,13 +12,6 @@ if sys.version_info < (3,0):
 	sys.exit(1)
 
 
-def validate_protocol(url):
-	"""Checks URL for HTTP..."""
-	target = ''.join(url)
-	if 'http://' not in target:
-		target = 'http://' + target
-	return target
-
 def get_inputs(response):
 	"""Finds input fields on page."""
 	soup = BeautifulSoup(response.text)
@@ -42,22 +35,33 @@ def get_query_strings(links):
 	return urlParameters;
 
 def get_url_parameters(link):
-	if(link != None):
+	if link:
 		url = urllib.parse.urlparse(link)
 		parameters = urllib.parse.parse_qs(url.query)
 		return parameters.keys()
-	return []	
+	return []
 
-def report(inputs=''):
+def get_cookies(response):
+	"""Returns a dict of cookies from the given response."""
+	if response:
+		return requests.utils.dict_from_cookiejar(response.cookies)
+
+def report(inputs=None, links=None, cookies=None):
 	"""Writes found inputs to a text file."""
-
-	# TODO(team): decide if we want to go this route
-
-	with open('inputs.txt', 'w+') as f:
+	with open('input_report.txt', 'w+') as f:
 		f.write('{: ^50}\n\n'.format('System Inputs'))
 		f.write('{:-^50}\n'.format('Input Fields'))
-		for i in inputs:
-			f.write('Alt: {0} Name: {1}\n'.format(i['alt'], i['name']))
+		if inputs:
+			for i in inputs:
+				f.write('Alt: {0} Name: {1}\n'.format(i['alt'], i['name']))
+		f.write('{:-^50}\n'.format('Reachable Links'))
+		if links:
+			for link in links:
+				f.write(link.join('\n'))
+		f.write('{:-^50}\n'.format('Cookies'))			
+		if cookies:
+			for cookie in cookies:
+				f.write('{0} : {1}\n'.format(cookie, cookies[cookie]))
 		f.close()
 
 def discover(url, common_words=None):
@@ -79,7 +83,12 @@ def discover(url, common_words=None):
 
 	result = c.crawl([Test(), Gatherer(), GuessingGatherer()])
 	print("FINISHED CRAWLING")
-	print(result)
+	r = requests.get(url[0])
+	inputs = get_inputs(r)
+	
+	# TODO(michael): pass the result of the crawl back to our reporter
+	cookies = get_cookies(r)
+	report(inputs, None, cookies)
 
 def get_common_words(words_file):
 	"""Converts words from text file into list."""

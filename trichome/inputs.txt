@@ -1,4 +1,0 @@
-                  System Inputs                   
-
--------------------Input Fields-------------------
-Alt: Search box Name: q

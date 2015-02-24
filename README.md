@@ -9,12 +9,12 @@
 A simple tool to fuzz test a web-based application.
 
 ### Usage
-`fuzz [discover | test] url OPTIONS`
+`python3 trichome.py [discover | test] url OPTIONS`
 
 #### Commands
-`fuzz discover`: prints a comprehensive, human-readable list of all discovered inputs to the system. Techniques include crawling + guessing. 
+`trichome discover`: prints a comprehensive, human-readable list of all discovered inputs to the system. Techniques include crawling + guessing. 
 
-`fuzz test`: discovers all inputs, then attempts a list of exploit vectors on these inputs.
+`trichome test`: discovers all inputs, then attempts a list of exploit vectors on these inputs.
 
 #### Flags
 `--custom-auth=string`: signals that trichome should use hard-coded auth for a specific application (e.g. dvwa).  
@@ -32,11 +32,11 @@ A simple tool to fuzz test a web-based application.
 
 ### Examples:
 ##### Discover inputs  
-`fuzz discover http://localhost:8080 --common-words=mywords.txt`  
+`python3 trichome.py discover http://localhost:8080 --common-words=mywords.txt`  
 
 ##### Discover inputs to DVWA using our hard-coded authentication  
-`fuzz discover http://localhost:8080 --common-words=mywords.txt`  
+`python3 trichome.py discover http://localhost:8080 --common-words=mywords.txt`  
 
 ##### Discover and Test DVWA without randomness  
-`fuzz test http://localhost:8080 --custom-auth=dvwa --common-words=words.txt --vectors=vectors.txt --sensitive=creditcards.txt --random=false`
+`python3 tricome.py test http://localhost:8080 --custom-auth=dvwa --common-words=words.txt --vectors=vectors.txt --sensitive=creditcards.txt --random=false`
 

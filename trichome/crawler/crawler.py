@@ -32,18 +32,18 @@ class Crawler(object):
 		self.debug = debug
 		self.url = url
 		
-		if(auth):
+		if auth:
 			authPostData = {'username' : 'admin', 'password' : 'password', 'Login' : 'Login'}
 			self.session.post(url, data=authPostData)
 
-	def crawl(self, gathers):
-		self.bfs(self.url, self.url, [], gathers)
+	def crawl(self, gatherers):
+		self.bfs(self.url, self.url, [], gatherers)
 
 	def log(self, msg):
 		if self.debug:
 			print("[BFS CRAWLER]:" + msg)
 
-	def bfs(self, url_base, url, visited, gathers):
+	def bfs(self, url_base, url, visited, gatherers):
 		self.log("Starting BFS link Crawler on " + url)
 		# Do the BFS
 		visited.append(url)
@@ -52,7 +52,7 @@ class Crawler(object):
 		if("text/html" in main.headers['content-type'].split(';')):
 
 			# Public to Gathers
-			for g in gathers:
+			for g in gatherers:
 				g.did_hit_url(url, main.content)
 
 			# Parse the DOM
@@ -85,9 +85,9 @@ class Crawler(object):
 			# Follow links recursivly that you haven't been too
 			all_visited = []
 			for l in [i for i in followable if i not in visited]:
-				all_visited.append(self.bfs(url_base, l, visited, gathers))
+				all_visited.append(self.bfs(url_base, l, visited, gatherers))
 
-			# When done return visited, not really used with the gathersers
+			# When done return visited, not really used with the gatherersers
 			return all_visited
 		else:
 			self.log("None parseable content type for " + url + " -> " + main.headers['content-type'])
