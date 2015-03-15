@@ -52,6 +52,9 @@ class Crawler(object):
 		if("text/html" in main.headers['content-type'].split(';')):
 			# Public to Gathers
 			for g in gatherers:
+				if main.status_code != 200:
+					self.log('Unsuccessful status code')
+
 				g.did_hit_url(url, main.content)
 
 			# Parse the DOM

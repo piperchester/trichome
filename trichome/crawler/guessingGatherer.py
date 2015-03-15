@@ -63,8 +63,7 @@ class VectorGatherer(Gatherer):
 	
 			for line in file:
 				for fileType in fileTypes:
-					guessedURL = baseURL + '/' + line.rstrip() + '.' + fileType;
-					print('A possible URL is: ' + guessedURL);
-					print('\n')	
+					guessedURL = ''.join([baseURL, '/', line.rstrip(), '.', fileType])
+					print(''.join(['A possible Vectored URL is: ', guessedURL, '\n']));
 
 				
