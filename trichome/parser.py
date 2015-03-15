@@ -7,7 +7,7 @@ def get_parser():
   """Initializes the argument parser."""
   parser = argparse.ArgumentParser(description='trichome: the one-stop-shop for web-based vulnerability testing')
   parser.add_argument('discover', help=
-                      'list all discovered inputs of target', nargs=1)
+                      'list all discovered inputs of target', nargs='?')
   parser.add_argument('test', help=
                       'discovers all inputs, then exploits inputs', nargs='?')
   parser.add_argument('URL', help=

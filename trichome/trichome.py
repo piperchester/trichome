@@ -90,7 +90,7 @@ def command_line_runner():
 	command_parser = parser.get_parser()
 	args = vars(command_parser.parse_args())
 
-	if args['discover']:
+	if args['discover'] == 'discover':
 		target = args['URL']
 		words = []
 		if args['common_words']:
@@ -98,6 +98,9 @@ def command_line_runner():
 			words = get_common_words(words_file)
 
 		result = discover(target, words)
+	else:
+		# TODO: perform testing here
+		print("Testing ...")
 
 if __name__ == "__main__":
 	command_line_runner()
