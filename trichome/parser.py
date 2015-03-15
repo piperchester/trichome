@@ -16,7 +16,7 @@ def get_parser():
                       'newline-delimited file of common words to be used in page guessing and input guessing') 
   parser.add_argument('-a', '--customauth', help=
                       'signals that trichome should use hard-coded auth for a specific application (e.g. dvwa)')
-  parser.add_argument('-v', '--vectors', help=
+  parser.add_argument('-v', '--vectors', nargs=1, type=argparse.FileType('r'), help=
                       'newline-delimited file of common exploits to vulnerabilities')
   parser.add_argument('-s', '--sensitive', help=
                       "newline-delimited file data that should never be leaked. It's assumed that this data is in the application's database (e.g. test data), but is not reported in any response")  

@@ -77,7 +77,7 @@ def discover(url, common_words=None):
 	cookies = get_cookies(r)
 	report(inputs, None, cookies)
 
-def get_common_words(words_file):
+def read_file(words_file):
 	"""Converts words from text file into list."""
 	words = []
 	with open(words_file.name, 'r') as f:
@@ -92,15 +92,13 @@ def command_line_runner():
 
 	if args['discover'] == 'discover':
 		target = args['URL']
-		words = []
 		if args['common_words']:
-			words_file = args['common_words'][0]
-			words = get_common_words(words_file)
+			common_words = read_file(args['common_words'][0])
 
-		result = discover(target, words)
+		result = discover(target, common_words)
 	else:
-		# TODO: perform testing here
-		print("Testing ...")
+		if args['vectors']:
+			vectors = read_file(args['vectors'][0])
 
 if __name__ == "__main__":
 	command_line_runner()
