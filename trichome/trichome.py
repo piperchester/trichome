@@ -114,7 +114,6 @@ def command_line_runner():
 		vector_input = None
 		sensitive_input = None
 		if args['vectors']:
-			print("vectors!")
 			vector_input = read_file(args['vectors'][0])
 			
 		if args['sensitive']:
