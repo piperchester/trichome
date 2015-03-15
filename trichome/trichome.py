@@ -3,7 +3,7 @@
 import sys, urllib, re, requests
 import parser
 from crawler.crawler import Crawler, Gatherer
-from crawler.guessingGatherer import InputGatherer, GuessingGatherer, CookieGatherer, CountGatherer
+from crawler.guessingGatherer import InputGatherer, GuessingGatherer, CookieGatherer, CountGatherer, VectorGatherer
 from bs4 import BeautifulSoup
 
 if sys.version_info < (3,0):
@@ -85,6 +85,14 @@ def read_file(words_file):
 	f.closed
 	return words
 
+
+def test(url, common_words=None, vectors=None):
+	"""Uses provided vectors and input to test against target."""
+	c = Crawler(url[0], auth=True)
+
+	result = c.crawl([VectorGatherer()])
+	print("Finished testing...")
+
 def command_line_runner():
 	"""Consumes commands to trichome."""
 	command_parser = parser.get_parser()
@@ -97,8 +105,11 @@ def command_line_runner():
 
 		result = discover(target, common_words)
 	else:
+		target = args['URL']
 		if args['vectors']:
 			vectors = read_file(args['vectors'][0])
+
+		tested = test(target, vectors)
 
 if __name__ == "__main__":
 	command_line_runner()

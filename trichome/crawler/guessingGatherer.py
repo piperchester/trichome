@@ -51,4 +51,20 @@ class InputGatherer(Gatherer):
 		inputs = soup.find_all('input')
 		print("Possible inputs:")
 		print(inputs)		
+
+class VectorGatherer(Gatherer):
+	def did_hit_url(self, url, body):
+		fileTypes = ['php', 'jsp']
+		file = open('vectors.txt', 'r')
+		parsedURL = urlparse(url)
+		
+		if parsedURL.hostname and parsedURL.scheme:
+			baseURL = parsedURL.scheme + '://' + parsedURL.hostname;
+	
+			for line in file:
+				for fileType in fileTypes:
+					guessedURL = baseURL + '/' + line.rstrip() + '.' + fileType;
+					print('A possible URL is: ' + guessedURL);
+					print('\n')	
+
 				
