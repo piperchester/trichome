@@ -25,7 +25,7 @@ A simple tool to fuzz test a web-based application.
 
 `--sensitive=file`: newline-delimited file data that should never be leaked. It's assumed that this data is in the application's database (e.g. test data), but is not reported in any response.   
 
-`--random=[true|false]`: when off, try each input to each page systematically.  When on, choose a random page, then a random input field and test all vectors. Default: false.  
+`--random`: Choose a random page, then a random input field and test all vectors. Otherwise Trichome will crawl systematically. Default: false.  
 
 `--slow=500`: number of milliseconds considered when a response is considered "slow". Default is 500 milliseconds  
 

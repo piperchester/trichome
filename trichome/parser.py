@@ -20,8 +20,8 @@ def get_parser():
                       'newline-delimited file of common exploits to vulnerabilities')
   parser.add_argument('-s', '--sensitive', nargs=1, type=argparse.FileType('r'), help=
                       "newline-delimited file data that should never be leaked. It's assumed that this data is in the application's database (e.g. test data), but is not reported in any response")  
-  parser.add_argument('-r', '--random', default=False, action='store_true', help=
-                      "when off, try each input to each page systematically. When on, choose a random page, then a random input field and test all vectors. Default: false.")
+  parser.add_argument('-r', '--random', action='store_true', default=False, help=
+                      "Choose a random page, then a random input field and test all vectors. Otherwise, try page systematically.")
   parser.add_argument('-z', '--slow', type=int, default=500, help=
                       "number of milliseconds considered when a response is considered 'slow'. Default is 500 milliseconds")
   return parser

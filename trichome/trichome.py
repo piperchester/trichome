@@ -86,7 +86,7 @@ def read_file(words_file):
 	return words
 
 
-def test(url, files):
+def test(url, files, random):
 	"""Uses provided vectors and input to test against target."""
 	# TODO(piper): pass files in to test.
 	c = Crawler(url[0], auth=True)
@@ -107,6 +107,7 @@ def command_line_runner():
 	else:
 		target = args['URL']
 		optional_files = []
+		random = False
 		if args['vectors']:
 			vectors = read_file(args['vectors'][0])
 			optional_files.append(vectors)
@@ -115,7 +116,12 @@ def command_line_runner():
 			sensitive = read_file(args['sensitive'][0])			
 			optional_files.append(sensitive)
 
-		tested = test(target, optional_files)
+		if args['random']:
+			random = True
+		else:
+			random = False		
+
+		tested = test(target, optional_files, random)
 
 if __name__ == "__main__":
 	command_line_runner()
