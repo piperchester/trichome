@@ -18,7 +18,7 @@ def get_parser():
                       'signals that trichome should use hard-coded auth for a specific application (e.g. dvwa)')
   parser.add_argument('-v', '--vectors', nargs=1, type=argparse.FileType('r'), help=
                       'newline-delimited file of common exploits to vulnerabilities')
-  parser.add_argument('-s', '--sensitive', help=
+  parser.add_argument('-s', '--sensitive', nargs=1, type=argparse.FileType('r'), help=
                       "newline-delimited file data that should never be leaked. It's assumed that this data is in the application's database (e.g. test data), but is not reported in any response")  
   parser.add_argument('-r', '--random', default=False, action='store_true', help=
                       "when off, try each input to each page systematically. When on, choose a random page, then a random input field and test all vectors. Default: false.")
