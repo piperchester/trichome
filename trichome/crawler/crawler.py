@@ -34,10 +34,10 @@ class Crawler(object):
 		
 		if auth:
 			authPostData = {'username' : 'admin', 'password' : 'password', 'Login' : 'Login'}
-			self.session.post(url, data=authPostData)
+			self.session.post(url, data=authPostData, verify=False)
 
 	def crawl(self, gatherers):
-		self.bfs(self.url, self.url, [], gatherers)
+		return self.bfs(self.url, self.url, [], gatherers)
 
 	def log(self, msg):
 		if self.debug:
@@ -81,15 +81,9 @@ class Crawler(object):
 			followable = same_origin + list(map(lambda x: origin.scheme + '://' + origin.netloc + x, root_origin))
 
 			# Follow links recursivly that you haven't been too
-			all_visited = []
-			breakpoint = 0
 			for l in [i for i in followable if i not in visited]:
-				if breakpoint >= 30:
-					break
-				else:
-					breakpoint = breakpoint + 1
-					all_visited.append(self.bfs(url_base, l, visited, gatherers))
-
-			return all_visited
+				visited.extend(self.bfs(url_base, l, visited, gatherers))
 		else:
 			self.log("None parseable content type for " + url + " -> " + main.headers['content-type'])
+
+		return visited

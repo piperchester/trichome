@@ -9,7 +9,6 @@ class GuessingGatherer(Gatherer):
 		file = open('common_words.txt', 'r')
 		parsedURL = urlparse(url)
 		
-		
 		if parsedURL.hostname != None and parsedURL.scheme != '':
 			baseURL = parsedURL.scheme + '://' + parsedURL.hostname;
 		
@@ -17,18 +16,18 @@ class GuessingGatherer(Gatherer):
 			for line in file:
 				for fileType in fileTypes:
 					guessedURL = baseURL + '/' + line.rstrip() + '.' + fileType;
-					print('A possible URL is: ' + guessedURL);
-					print('\n')
+					# print('A possible URL is: ' + guessedURL);
+					# print('\n')
 
 class CookieGatherer(Gatherer):
 	def did_hit_url(self, url, body):
 		parsedURL = urlparse(url)
 		
 		if parsedURL.hostname and parsedURL.scheme is not '':
-			response = requests.get(url)
+			response = requests.get(url, verify=False)
 			cookies = requests.utils.dict_from_cookiejar(response.cookies)
-			print("Possible cookies:\n")
-			print(cookies)		
+			# print("Possible cookies:\n")
+			# print(cookies)		
 
 
 class CountGatherer(Gatherer):
@@ -41,16 +40,17 @@ class CountGatherer(Gatherer):
 		self.count = self.count + 1
 		if self.count >= 30:
 			return
-		else:				
-			print(self.count)		
+		else:
+			pass				
+			# print(self.count)		
 
 class InputGatherer(Gatherer):
 	def did_hit_url(self, url, body):
-		response = requests.get(url)
+		response = requests.get(url, verify=False)
 		soup = BeautifulSoup(response.text)
 		inputs = soup.find_all('input')
-		print("Possible inputs:")
-		print(inputs)		
+		# print("Possible inputs:")
+		# print(inputs)		
 
 class VectorGatherer(Gatherer):
 	def did_hit_url(self, url, body):
@@ -64,6 +64,6 @@ class VectorGatherer(Gatherer):
 			for line in file:
 				for fileType in fileTypes:
 					guessedURL = ''.join([baseURL, '/', line.rstrip(), '.', fileType])
-					print(''.join(['A possible Vectored URL is: ', guessedURL, '\n']));
+					# print(''.join(['A possible Vectored URL is: ', guessedURL, '\n']));
 
 				

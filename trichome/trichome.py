@@ -66,13 +66,21 @@ def report(inputs=None, links=None, cookies=None):
 def discover(url, common_words=None):
 	"""Retrieves information from the provided URL."""
 	print("Beginning...")
-	c = Crawler(url[0], auth=True)
+	c = Crawler(url, auth=True)
 
 	result = c.crawl([CountGatherer(), GuessingGatherer(), InputGatherer(), Gatherer(), CookieGatherer()])
 	print("FINISHED CRAWLING")
 
+	print("")
+	print("")
+	print("")
+	print(result)
+	print("")
+	print("")
+	print("")
+
 	# TODO(michael): pass the result of the crawl back to our reporter
-	r = requests.get(url[0])
+	r = requests.get(url, verify=False)
 	inputs = get_inputs(r)
 	cookies = get_cookies(r)
 	report(inputs, None, cookies)
@@ -106,10 +114,11 @@ def command_line_runner():
 	args = vars(command_parser.parse_args())
 
 	if args['discover'] == 'discover':
+		common_words = []
 		if args['common_words']:
 			common_words = read_file(args['common_words'][0])
 
-		result = discover(target, common_words)
+		result = discover(args['URL'][-1], common_words)
 	else:
 		vector_input = None
 		sensitive_input = None
