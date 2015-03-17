@@ -1,4 +1,5 @@
 import requests
+import urllib.parse
 from bs4 import BeautifulSoup
 from crawler.crawler import Gatherer
 from urllib.parse import urlparse
@@ -65,5 +66,20 @@ class VectorGatherer(Gatherer):
 				for fileType in fileTypes:
 					guessedURL = ''.join([baseURL, '/', line.rstrip(), '.', fileType])
 					# print(''.join(['A possible Vectored URL is: ', guessedURL, '\n']));
+
+class URLParamsGatherer(Gatherer):
+	def did_hit_url(self, url, body):
+		if url:
+			link = urllib.parse.urlparse(url)
+			parameters = urllib.parse.parse_qs(link.query)
+			for key in parameters.keys():
+				for value in parameters[key]:
+					if(self.is_sanitized(value)):
+						print(key + ' may not be sanitized');
+	
+	def is_sanitized(self, value):
+		decoded = urllib.parse.unquote(value)
+		return value.isalnum() or decoded != value
+			 
 
 				

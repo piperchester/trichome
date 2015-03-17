@@ -3,7 +3,7 @@
 import sys, urllib, re, requests
 import parser
 from crawler.crawler import Crawler, Gatherer
-from crawler.guessingGatherer import InputGatherer, GuessingGatherer, CookieGatherer, CountGatherer, VectorGatherer
+from crawler.guessingGatherer import InputGatherer, GuessingGatherer, CookieGatherer, CountGatherer, VectorGatherer, URLParamsGatherer
 from bs4 import BeautifulSoup
 
 if sys.version_info < (3,0):
@@ -25,20 +25,6 @@ def get_links(response):
 	for tag in tags:
 		links.append(tag.get('href'))
 	return links
-
-def get_query_strings(links):
-	"""Find all query strings from links dict."""
-	urlParameters = {}
-	for link in links:
-		urlParameters[link] = get_url_parameters(link);
-	return urlParameters;
-
-def get_url_parameters(link):
-	if link:
-		url = urllib.parse.urlparse(link)
-		parameters = urllib.parse.parse_qs(url.query)
-		return parameters.keys()
-	return []
 
 def get_cookies(response):
 	"""Returns a dict of cookies from the given response."""
@@ -68,7 +54,7 @@ def discover(url, common_words=None):
 	print("Beginning...")
 	c = Crawler(url, auth=True)
 
-	result = c.crawl([CountGatherer(), GuessingGatherer(), InputGatherer(), Gatherer(), CookieGatherer()])
+	result = c.crawl([CountGatherer(), GuessingGatherer(), InputGatherer(), Gatherer(), CookieGatherer(), URLParamsGatherer()])
 	print("FINISHED CRAWLING")
 
 	print("")
