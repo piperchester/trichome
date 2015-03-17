@@ -1,5 +1,4 @@
 # Trichome
-![](http://upload.wikimedia.org/wikipedia/commons/9/9e/Autumn_Red_peaches.jpg)
 > Here you stand, a Gladiator, in the Coliseum of Testing.
 
 ### How (Wiki)
