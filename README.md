@@ -1,11 +1,6 @@
 # Trichome
-> Here you stand, a Gladiator, in the Coliseum of Testing.
-
-### How (Wiki)
-[Here](https://github.com/piperchester/trichome/wiki)
-
-### What?
 A simple tool to fuzz test a web-based application.
+> Here you stand, a Gladiator, in the Coliseum of Testing.
 
 ### Usage
 `python3 trichome.py [discover | test] url OPTIONS`
@@ -28,7 +23,6 @@ A simple tool to fuzz test a web-based application.
 
 `--slow=500`: number of milliseconds considered when a response is considered "slow". Default is 500 milliseconds  
 
-
 ### Examples:
 ##### Discover inputs  
 `python3 trichome.py discover http://localhost:8080 --common-words=mywords.txt`  
@@ -39,3 +33,5 @@ A simple tool to fuzz test a web-based application.
 ##### Discover and Test DVWA without randomness  
 `python3 tricome.py test http://localhost:8080 --custom-auth=dvwa --common-words=words.txt --vectors=vectors.txt --sensitive=creditcards.txt --random=false`
 
+### Wiki
+[Check out our wiki for how to use Trichome](https://github.com/piperchester/trichome/wiki)
