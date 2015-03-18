@@ -3,33 +3,11 @@
 import sys, urllib, re, requests
 import parser
 from crawler.crawler import Crawler, Gatherer
-from crawler.guessingGatherer import InputGatherer, GuessingGatherer, CookieGatherer, CountGatherer, VectorGatherer, URLParamsGatherer
-from bs4 import BeautifulSoup
+from crawler.guessingGatherer import *
 
 if sys.version_info < (3,0):
 	print('Uh oh. Trichome requires Python 3.')
 	sys.exit(1)
-
-
-def get_inputs(response):
-	"""Finds input fields on page."""
-	soup = BeautifulSoup(response.text)
-	inputs = soup.find_all('input')
-	return inputs
-
-def get_links(response):
-	"""Find links on page, add to crawls tuple."""
-	soup = BeautifulSoup(response.text)
-	tags = soup.find_all('a')
-	links = []
-	for tag in tags:
-		links.append(tag.get('href'))
-	return links
-
-def get_cookies(response):
-	"""Returns a dict of cookies from the given response."""
-	if response:
-		return requests.utils.dict_from_cookiejar(response.cookies)
 
 def report(inputs=None, links=None, cookies=None):
 	"""Writes found inputs to a text file."""
@@ -54,7 +32,7 @@ def discover(url, common_words=None):
 	print("Beginning...")
 	c = Crawler(url, auth=True)
 
-	result = c.crawl([CountGatherer(), GuessingGatherer(), InputGatherer(), Gatherer(), CookieGatherer(), URLParamsGatherer()])
+	result = c.crawl([CountGatherer(), GuessingGatherer(), Gatherer(), URLParamsGatherer()])
 	print("FINISHED CRAWLING")
 
 	print("")
@@ -65,10 +43,7 @@ def discover(url, common_words=None):
 	print("")
 	print("")
 
-	# TODO(michael): pass the result of the crawl back to our reporter
 	r = requests.get(url, verify=False)
-	inputs = get_inputs(r)
-	cookies = get_cookies(r)
 	report(inputs, None, cookies)
 
 def read_file(words_file):

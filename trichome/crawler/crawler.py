@@ -22,7 +22,27 @@ class Gatherer(object):
 		super(Gatherer, self).__init__()
 		
 	def did_hit_url(self, url, body):
-		print("Hit -> " + url)
+		print(''.join(["Hit->", url, "\n"]))
+
+	def get_inputs(self, url, body, log=False):
+		"""Finds input fields on page."""
+		inputs = BeautifulSoup(body).find_all('input')
+		if log:
+			print("".join(["\nInputs:"], inputs))
+		return inputs		
+	
+	def get_cookies(self, url):
+		"""Returns a dict of cookies from the given response."""
+		if response:
+			return requests.utils.dict_from_cookiejar(response.cookies)
+	
+	def get_links(self, url, body):
+		"""Find links on page, add to crawls tuple."""
+		anchor_tags = BeautifulSoup(body).find_all('a')
+		links = []
+		for tag in anchor_tags:
+			links.append(tag.get('href'))
+		return links			
 
 class Crawler(object):
 	"""docstring for Crawler"""

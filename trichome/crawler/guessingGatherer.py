@@ -20,16 +20,6 @@ class GuessingGatherer(Gatherer):
 					# print('A possible URL is: ' + guessedURL);
 					# print('\n')
 
-class CookieGatherer(Gatherer):
-	def did_hit_url(self, url, body):
-		parsedURL = urlparse(url)
-		
-		if parsedURL.hostname and parsedURL.scheme is not '':
-			response = requests.get(url, verify=False)
-			cookies = requests.utils.dict_from_cookiejar(response.cookies)
-			# print("Possible cookies:\n")
-			# print(cookies)		
-
 
 class CountGatherer(Gatherer):
 	def __init__(self):
@@ -43,15 +33,7 @@ class CountGatherer(Gatherer):
 			return
 		else:
 			pass				
-			# print(self.count)		
-
-class InputGatherer(Gatherer):
-	def did_hit_url(self, url, body):
-		response = requests.get(url, verify=False)
-		soup = BeautifulSoup(response.text)
-		inputs = soup.find_all('input')
-		# print("Possible inputs:")
-		# print(inputs)		
+			# print(self.count)			
 
 class VectorGatherer(Gatherer):
 	def did_hit_url(self, url, body):
